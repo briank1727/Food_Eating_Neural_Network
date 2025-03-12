@@ -117,11 +117,16 @@ public class Environment : MonoBehaviour
                 if (creatures[i].GetPosition().magnitude > environmentRadius)
                     DeleteCreature(i);
 
-            foreach (Creature creature in creatures)
+            for (int i = 0; i < creatures.Count; i++)
             {
-                for (int i = 0; i < foods.Count; i++)
-                    if (!creature.GetFoodEaten().Contains(i) && Vector2.Distance(creature.GetPosition(), foods[i].GetPosition()) < foodRadius + creatureRadius)
-                        creature.EatFood(i);
+                Creature creature = creatures[i];
+                for (int j = 0; j < foods.Count; j++)
+                    if (!creature.GetFoodEaten().Contains(j) && Vector2.Distance(creature.GetPosition(), foods[j].GetPosition()) < foodRadius + creatureRadius)
+                    {
+                        creature.EatFood(j);
+                        if (creature.IsRendered())
+                            foods[j].DestroyGameObject();
+                    }
             }
         }
     }

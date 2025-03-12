@@ -94,4 +94,9 @@ public class Creature
     {
         return neuralNetwork.GetLayersCopy();
     }
+
+    public bool IsRendered()
+    {
+        return gameObject != null;
+    }
 }

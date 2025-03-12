@@ -15,9 +15,9 @@ public class FileManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void SaveNeuralNetwork(Layer[] layers, int inputSize)
+    public void SaveNeuralNetwork(Layer[] layers, int inputSize, string fileName = "neural_network.txt")
     {
-        string path = Application.persistentDataPath + "/neural_network.txt";
+        string path = Application.persistentDataPath + "/" + fileName;
         System.IO.File.WriteAllText(path, "Input size:\n" + inputSize + "\n");
 
         for (int i = 0; i < layers.Length; i++)
@@ -33,12 +33,12 @@ public class FileManager : MonoBehaviour
         Debug.Log("Neural network saved to " + path);
     }
 
-    public Layer[] LoadNeuralNetwork()
+    public Layer[] LoadNeuralNetwork(string fileName = "neural_network.txt")
     {
-        string path = Application.persistentDataPath + "/neural_network.txt";
+        string path = Application.persistentDataPath + "/" + fileName;
         if (!System.IO.File.Exists(path))
         {
-            Debug.LogError("No saved neural network found at " + path);
+            Debug.Log("No saved neural network found at " + path);
             return null;
         }
 

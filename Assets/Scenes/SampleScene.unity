@@ -1095,7 +1095,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 216411135}
         m_TargetAssemblyTypeName: Environment, Assembly-CSharp
-        m_MethodName: SaveCurrentNetwork
+        m_MethodName: SaveCurrentNetworks
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

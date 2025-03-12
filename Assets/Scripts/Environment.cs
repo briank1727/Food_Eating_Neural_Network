@@ -226,43 +226,49 @@ public class Environment : MonoBehaviour
         return animationTime;
     }
 
-    public void SaveCurrentNetwork()
+    public void SaveCurrentNetworks()
     {
         if (bestCreatures.Count > 0)
-            FileManager.instance.SaveNeuralNetwork(bestCreatures[0].GetLayersCopy(), numRays * 2);
+        {
+            for (int i = 0; i < bestCreatures.Count; i++)
+                FileManager.instance.SaveNeuralNetwork(bestCreatures[i].GetLayersCopy(), numRays * 2, "neural_network" + i);
+        }
         else
             Debug.Log("No best creature to save");
     }
 
     public void LoadCurrentNetwork()
     {
-        Layer[] loadedLayers = FileManager.instance.LoadNeuralNetwork();
-        if (loadedLayers != null && loadedLayers.Length == networkShape.Length - 1)
+        for (int networkIndex = 0; networkIndex < 5; networkIndex++)
         {
-            for (int i = 0; i < loadedLayers.Length; i++)
+            Layer[] loadedLayers = FileManager.instance.LoadNeuralNetwork("neural_network" + networkIndex);
+            if (loadedLayers != null && loadedLayers.Length == networkShape.Length - 1)
             {
-                if (loadedLayers[i].nodes.Length != networkShape[i + 1] || loadedLayers[i].weights.Length != networkShape[i] || loadedLayers[i].weights[0].Length != networkShape[i + 1] || loadedLayers[i].biases.Length != networkShape[i + 1])
+                for (int i = 0; i < loadedLayers.Length; i++)
                 {
-                    Debug.LogError("Loaded network shape does not match the defined network shape.");
-                    Debug.Log(loadedLayers[i].nodes.Length);
-                    Debug.Log(networkShape[i + 1]);
-                    Debug.Log(loadedLayers[i].weights.Length);
-                    Debug.Log(networkShape[i]);
-                    Debug.Log(loadedLayers[i].weights[0].Length);
-                    Debug.Log(networkShape[i + 1]);
-                    Debug.Log(loadedLayers[i].biases.Length);
-                    Debug.Log(networkShape[i + 1]);
-                    return;
+                    if (loadedLayers[i].nodes.Length != networkShape[i + 1] || loadedLayers[i].weights.Length != networkShape[i] || loadedLayers[i].weights[0].Length != networkShape[i + 1] || loadedLayers[i].biases.Length != networkShape[i + 1])
+                    {
+                        Debug.LogError("Loaded network shape does not match the defined network shape.");
+                        Debug.Log(loadedLayers[i].nodes.Length);
+                        Debug.Log(networkShape[i + 1]);
+                        Debug.Log(loadedLayers[i].weights.Length);
+                        Debug.Log(networkShape[i]);
+                        Debug.Log(loadedLayers[i].weights[0].Length);
+                        Debug.Log(networkShape[i + 1]);
+                        Debug.Log(loadedLayers[i].biases.Length);
+                        Debug.Log(networkShape[i + 1]);
+                        return;
+                    }
                 }
-            }
-            Creature newCreature = new Creature(networkShape, creaturePrefab, creatureParent, Vector2.zero, Vector2.up, turningSpeed, movementSpeed, loadedLayers, 0.0f, 0.0f, false);
-            bestCreatures.Add(newCreature);
+                Creature newCreature = new Creature(networkShape, creaturePrefab, creatureParent, Vector2.zero, Vector2.up, turningSpeed, movementSpeed, loadedLayers, 0.0f, 0.0f, false);
+                bestCreatures.Add(newCreature);
 
-            Debug.Log("Network loaded successfully.");
-        }
-        else
-        {
-            Debug.LogError("Loaded network shape does not match the defined network shape.");
+                Debug.Log("neural_network" + networkIndex + " loaded successfully.");
+            }
+            else
+            {
+                Debug.LogError("Loaded network shape does not match the defined network shape.");
+            }
         }
     }
 
